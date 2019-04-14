@@ -4,6 +4,9 @@ import Slider from '@react-native-community/slider';
 import smallLogo from './images/VegaStar.png';
 import WalletAmount from './components/WalletAmount.js';
 import SplashScreen from 'react-native-splash-screen';
+import AppIntroSlider from 'react-native-app-intro-slider';
+import {IntroSlides} from './components/Introslides';
+import { Link } from 'react-router';
 
 
 class CircleButton extends Component {
@@ -32,87 +35,98 @@ class CircleButton extends Component {
 export default class App extends Component {
   constructor(props){
     super(props);
+    this.cool = new IntroSlides();
     this.state = {
-      isLoading: true,
-      dataSource: null,
+      showRealApp: false
     }
   }
 
   componentDidMount(){
     SplashScreen.hide();
-    return fetch('https://facebook.github.io/react-native/movies.json', {})
-          .then((response) => response.json())
-          .then((responseJson) => {
-
-            this.setState({
-              isLoading: false,
-              dataSource: responseJson.result,
-            })
-          })
-
-        .catch((error) => {
-          console.log(error)
-        });
   }
 
+  _onDone = () => {
+    // User finished the introduction. Show real app through
+    // navigation or simply by controlling state
+    this.setState({ showRealApp: true });
+  }
+
+
   render() {
-    if (this.state.isLoading) {
-      return(
-        <View >
-          <ActivityIndicator />
+    if (this.state.showRealApp) {
+      return (
+        <View>
+          {/* Black Wallet Screen */}
+          <View style={styles.myBalance}>
+            <Image source={smallLogo} style={styles.smallLogo}/>
+            <Text style={styles.myWallet}>Your Wallet</Text>
+            <View style={styles.line}></View>
+            <WalletAmount />
+          </View>
+          {/* White Screen with Slider (DAI CONVERSION) */}
+          <View style={styles.daiView}>
+            <View style={{justifyContent: 'center', alignItems: 'center'}}>
+              <Text style={{textAlign: 'center', color: '#000', fontSize: 30, fontWeight: '200', right: 80, top: 50}}>
+                DAI
+              </Text>
+              <Slider
+                style={{width: 175, right: 80, top: 70}}
+                borderRadius={20}
+                minimumValue={0}
+                maximumValue={1}
+                minimumTrackTintColor="#D3B7E2"
+                maximumTrackTintColor="#3C3B3B"
+              />
+            </View>
+            {/* Amount Changing */}
+            <View style={styles.vegaValue}>
+              <Text style={styles.vegaAmount}>Amount</Text>
+              <View style={styles.lineTwo}></View>
+            </View>
+          </View>
+          {/* Screen for Requirements */}
+          <View style={{alignItems: 'center', justifyContent: 'center',}}>
+            <View style={styles.requirementBox}>
+              <View style={styles.invisbox}>
+                <Text style={styles.requirementText}>- Current price on ETH2DAI is >1% different from the median price</Text>
+                <Text style={styles.requirementText}>- Current price on ETH2DAI is >1% different from the median of all checkpoint in the last 3.5 minutes</Text>
+                <Text style={styles.requirementText}>- The current price on ETH2DAI is >1% differnt from the last checkpoint</Text>
+                <Text style={styles.requirementText}>- It has been >3 hours since the last price checkpoint was registered</Text>
+              </View>
+              <View style={{alignItems: 'center', justifyContent: 'center', padding: 20}}>
+                <CircleButton name='Poke!'/>
+              </View>
+            </View> 
+          </View>
+          
         </View>
-      )
+      );
     } else {
-    return (
-      <View>
-        {/* Black Wallet Screen */}
-        <View style={styles.myBalance}>
-          <Image source={smallLogo} style={styles.smallLogo}/>
-          <Text style={styles.myWallet}>Your Wallet</Text>
-          <View style={styles.line}></View>
-          <WalletAmount />
-        </View>
-        {/* White Screen with Slider (DAI CONVERSION) */}
-        <View style={styles.daiView}>
-          <View style={{justifyContent: 'center', alignItems: 'center'}}>
-            <Text style={{textAlign: 'center', color: '#000', fontSize: 30, fontWeight: '200', right: 80, top: 50}}>
-              DAI
-            </Text>
-            <Slider
-              style={{width: 175, right: 80, top: 70}}
-              borderRadius={20}
-              minimumValue={0}
-              maximumValue={1}
-              minimumTrackTintColor="#D3B7E2"
-              maximumTrackTintColor="#3C3B3B"
-            />
-          </View>
-          {/* Amount Changing */}
-          <View style={styles.vegaValue}>
-            <Text style={styles.vegaAmount}>Amount</Text>
-            <View style={styles.lineTwo}></View>
-          </View>
-        </View>
-        {/* Screen for Requirements */}
-        <View style={{alignItems: 'center', justifyContent: 'center',}}>
-          <View style={styles.requirementBox}>
-            <View style={styles.invisbox}>
-              <Text style={styles.requirementText}>- Current price on ETH2DAI is >1% different from the median price</Text>
-              <Text style={styles.requirementText}>- Current price on ETH2DAI is >1% different from the median of all checkpoint in the last 3.5 minutes</Text>
-              <Text style={styles.requirementText}>- The current price on ETH2DAI is >1% differnt from the last checkpoint</Text>
-              <Text style={styles.requirementText}>- It has been >3 hours since the last price checkpoint was registered</Text>
-            </View>
-            <View style={{alignItems: 'center', justifyContent: 'center', padding: 20}}>
-              <CircleButton name='Poke!'/>
-            </View>
-          </View> 
-        </View>
-        
-      </View>
-    );
+      return <AppIntroSlider renderItem={this.cool._renderItem} slides={slides} onDone={this._onDone}/>;
     }
   }
 }
+
+const slides = [
+  {
+    key: 'somethun',
+    title: 'Title 1',
+    text: 'What is cryptocurrency?',
+    backgroundColor: '#59b2ab',
+  },
+  {
+    key: 'somethun-dos',
+    title: 'Title 2',
+    text: 'Other cool stuff',
+    backgroundColor: '#febe29',
+  },
+  {
+    key: 'somethun1',
+    title: 'Rocket guy',
+    text: 'I\'m already out of descriptions\n\nLorem ipsum bla bla bla',
+    backgroundColor: '#22bcb5',
+  }
+];
 
 const styles = StyleSheet.create({
   background: {
@@ -161,8 +175,8 @@ const styles = StyleSheet.create({
     height: 200,
   },
   requirementBox: {
-    height: 350,
-    width: 300,
+    height: 400,
+    width: 350,
     borderRadius: 10,
     backgroundColor: '#3C3B3B',
   },
@@ -185,7 +199,7 @@ const styles = StyleSheet.create({
   },
   requirementText: {
     color: 'white',
-    fontSize: 10,
+    fontSize: 13,
     fontWeight: '100',
     padding: 6,
     textAlign: 'center'

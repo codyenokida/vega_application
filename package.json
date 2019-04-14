@@ -9,8 +9,10 @@
   "dependencies": {
     "@react-native-community/slider": "^1.0.4",
     "react": "16.8.3",
-    "react-native": "0.59.4",
+    "react-native": "^0.59.4",
+    "react-native-app-intro-slider": "^2.0.1",
     "react-native-splash-screen": "3.0.6",
+    "react-router": "^5.0.0",
     "web3": "^1.0.0-beta.52"
   },
   "devDependencies": {
