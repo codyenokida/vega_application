@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View, Image, ImageBackground, TouchableOpacity} from 'react-native';
+import {Platform, StyleSheet, Text, View, Image, ImageBackground, TouchableOpacity, ActivityIndicator} from 'react-native';
 import Slider from '@react-native-community/slider';
 import smallLogo from './images/VegaStar.png';
 import WalletAmount from './components/WalletAmount.js';
@@ -7,9 +7,7 @@ import SplashScreen from 'react-native-splash-screen';
 
 
 class CircleButton extends Component {
-  componentDidMount(){
-    SplashScreen.hide();
-  }
+
   render() {
     return (
        <TouchableOpacity
@@ -32,7 +30,39 @@ class CircleButton extends Component {
 }
 
 export default class App extends Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      isLoading: true,
+      dataSource: null,
+    }
+  }
+
+  componentDidMount(){
+    SplashScreen.hide();
+    return fetch('https://facebook.github.io/react-native/movies.json', {})
+          .then((response) => response.json())
+          .then((responseJson) => {
+
+            this.setState({
+              isLoading: false,
+              dataSource: responseJson.result,
+            })
+          })
+
+        .catch((error) => {
+          console.log(error)
+        });
+  }
+
   render() {
+    if (this.state.isLoading) {
+      return(
+        <View >
+          <ActivityIndicator />
+        </View>
+      )
+    } else {
     return (
       <View>
         {/* Black Wallet Screen */}
@@ -80,6 +110,7 @@ export default class App extends Component {
         
       </View>
     );
+    }
   }
 }
 
