@@ -82,6 +82,7 @@ export default class App extends Component {
             <View style={styles.vegaValue}>
               <Text style={styles.vegaAmount}>Amount</Text>
               <View style={styles.lineTwo}></View>
+              <Text style={styles.dollar}>$8,185.50</Text>
             </View>
           </View>
           {/* Screen for Requirements */}
@@ -136,6 +137,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#3C3B3B',
     height: 220,
     alignItems: 'center',
+  },
+  dollar: {
+    textAlign: 'center', 
+    color: '#D3B7E2',
+    fontSize: 20,
+    fontWeight: '200',
+    top: 45,
   },
   logo: {
     alignItems: 'center',

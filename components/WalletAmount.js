@@ -5,7 +5,7 @@ import {Platform, StyleSheet, Text, View, Image, ImageBackground, TouchableOpaci
 export default class WalletAmount extends Component {
   render() {
     return (
-      <Text style={styles.text}>2,000 ETH</Text>
+      <Text style={styles.text}>50 ETH</Text>
     );
   }
 }
